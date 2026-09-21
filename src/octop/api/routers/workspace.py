@@ -200,7 +200,7 @@ async def write_file(
     try:
         await ws.aupload_bytes(_workspace_io_path(path, from_workspace=from_workspace), data)
     except Exception as exc:
-        raise OctopError(ErrorCode.NOT_FOUND, f"cannot write {path!r}: {exc}") from exc
+        raise _map_workspace_fs_error(exc, operation="write", path=path) from exc
     return {"path": path, "size": len(data)}
 
 
@@ -321,7 +321,7 @@ async def upload_file(
             data,
         )
     except Exception as exc:
-        raise OctopError(ErrorCode.NOT_FOUND, f"cannot upload to {target!r}: {exc}") from exc
+        raise _map_workspace_fs_error(exc, operation="upload", path=target) from exc
     return {"path": target, "size": len(data)}
 
 
